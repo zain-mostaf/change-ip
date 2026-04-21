@@ -13,7 +13,7 @@
 locals {
     private_dns_instance_id = var.private_dns_instance_id
     private_dns_zone_id = var.private_dns_zone_id
-    private_dns_zone_name = var.private_dns_zone_name
+    #private_dns_zone_name = var.private_dns_zone_name
     private_dns_ttl = var.private_dns_ttl
     machine_ip_name_mapping = var.machine_ip_name_mapping
     private_dns_ptr_records = true

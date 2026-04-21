@@ -136,7 +136,7 @@ module dns_records {
     ibmcloud_api_key = var.ibmcloud_api_key
     private_dns_instance_id = local.private_dns_instance_id
     private_dns_zone_id = local.private_dns_zone_id
-    private_dns_zone_name = local.domain_name
+    #private_dns_zone_name = local.domain_name
     machine_ip_name_mapping = local.worker_pool_ip_name_mapping
 }
 
