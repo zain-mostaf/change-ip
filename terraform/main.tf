@@ -105,7 +105,7 @@ locals {
     worker_pool_prefix = var.worker_pool_prefix
     worker_pool_start_number_at = var.worker_pool_start_at_number
     #worker_pool_ips = flatten([for subnet in local.worker_pool_subnet_segmentation : [for index in range(pow(2, 32 - split("/", subnet)[1])) : cidrhost(subnet, index)]])
-    worker_pool_ips = flatten([for subnet in local.worker_pool_subnet_segmentation : [for index in range(pow(2, 32 - split("/", subnet)[1])) : cidrhost(subnet, index + var.worker_ip_offset)]])
+    worker_pool_ips = flatten([for subnet in local.worker_pool_subnet_segmentation : [for index in range(local.worker_pool_size) : cidrhost(subnet, index + var.worker_ip_offset)]])
     worker_pool_name_prefix = local.worker_pool_prefix != "" ? local.worker_pool_prefix : "worker"
     worker_pool_worker_names = [for i in range(local.worker_pool_size) : "${local.cluster_prefix}-${local.worker_pool_name_prefix}-${format("%04d", i + local.worker_pool_start_number_at)}"]
     worker_pool_ip_name_mapping = {for idx in range(min(local.worker_pool_size, length(local.worker_pool_ips))) : local.worker_pool_ips[idx] => local.worker_pool_worker_names[idx]}
