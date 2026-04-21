@@ -21,7 +21,7 @@ locals {
     subnet_id_or_name = var.subnet_id_or_name
     resource_group_id = var.resource_group_id
     ssh_keys = var.ssh_keys
-    cloud_init_script = var.cloud_init_script
+    #cloud_init_script = var.cloud_init_script
     tags = var.worker_tags
     boot_volume_size = 100
 }

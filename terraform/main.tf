@@ -40,19 +40,6 @@ data shell_script validate_pool_cidr_size {
 }
 
 // validation for ad_join_password field against password protection coming from parent workspace
-data shell_script asterisk_received_in_password {
-    lifecycle_commands {
-        read = <<EOF
-        AP=`echo '${local.ad_password}' | grep '\*\*\*'`
-        if [ "$AP" != "" ]
-        then
-             echo "Please check your AD Password. It seems to be encrypted and invalid."
-             exit 1
-        fi
-        echo '{ "message" : "ok" }'
-        EOF
-    }
-}
 
 locals {
 
