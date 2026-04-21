@@ -13,3 +13,7 @@
 # output ego_conf {
 #     value = module.cloud_init_scripts.parsed_ego_conf
 # }
+
+output "domain_name" {
+  value = local.domain_name
+}

@@ -88,6 +88,7 @@ locals {
     resource_group_id = local.output.resource_group_id
     private_dns_instance_id = local.output.private_dns_instance_id
     private_dns_zone_id = local.output.private_dns_zone_id
+    domain_name         = try(local.output.domain_name, "")
     ssh_key_ids = try(jsondecode(local.output.ssh_key_ids), [])
 
     /*
@@ -158,3 +159,13 @@ module shared_workers {
     ssh_keys = local.ssh_key_ids
     vpc_id = local.workload_vpc_id
 }
+
+
+# user_data = templatefile("${path.module}/cloud-init/workers.tpl", {
+#     base64_zip    = filebase64("${path.module}/cloud-init/deployment-scripts.zip")
+
+#   })
+
+# cd /opt/symphony-scripts/nextgen
+# chmod 755 *.sh
+# ./worker.sh "${local.cluster_name}" "${var.management_node_count}" "${local.dns_domain}" "${module.gpfs_storage.scale_manager_names[0]}" "${data.ibm_is_subnet.subnet.ipv4_cidr_block}" "${var.ad_dns_ips}" "${var.ad_domain}" "${var.ad_user}" "${var.ad_password}"
