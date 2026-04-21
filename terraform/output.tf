@@ -14,6 +14,10 @@
 #     value = module.cloud_init_scripts.parsed_ego_conf
 # }
 
-output "domain_name" {
-  value = local.domain_name
+# output "domain_name" {
+#   value = local.domain_name
+# }
+
+output "debug_workspace_output" {
+  value = local.output
 }
