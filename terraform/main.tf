@@ -88,7 +88,7 @@ locals {
     resource_group_id = local.output.resource_group_id
     private_dns_instance_id = local.output.private_dns_instance_id
     private_dns_zone_id = local.output.private_dns_zone_id
-    domain_name         = try(local.output.domain_name, "")
+    domain_name = data.ibm_dns_zone.zone.name
     ssh_key_ids = try(jsondecode(local.output.ssh_key_ids), [])
 
     /*
