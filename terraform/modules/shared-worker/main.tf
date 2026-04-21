@@ -46,7 +46,7 @@ resource "ibm_is_instance" "worker" {
   zone           = local.zone
   keys           = local.ssh_keys
   resource_group = local.resource_group_id
-  user_data      = replace(local.cloud_init_script, "__COMPUTERNAME__", each.value)
+  #user_data      = replace(local.cloud_init_script, "__COMPUTERNAME__", each.value)
 
   tags           = concat(local.tags, ["role:symphony-worker"])
   metadata_service {
