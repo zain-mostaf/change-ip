@@ -88,7 +88,7 @@ locals {
     resource_group_id = local.output.resource_group_id
     private_dns_instance_id = local.output.private_dns_instance_id
     private_dns_zone_id = local.output.private_dns_zone_id
-    domain_name = local.output.private_dns_zone_name
+    dns_domain = try(module.dns_records[0].domain_name, "")
     ssh_key_ids = try(jsondecode(local.output.ssh_key_ids), [])
 
     /*
@@ -136,7 +136,6 @@ module dns_records {
     ibmcloud_api_key = var.ibmcloud_api_key
     private_dns_instance_id = local.private_dns_instance_id
     private_dns_zone_id = local.private_dns_zone_id
-    #private_dns_zone_name = local.domain_name
     machine_ip_name_mapping = local.worker_pool_ip_name_mapping
 }
 
