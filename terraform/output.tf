@@ -14,9 +14,10 @@
 #     value = module.cloud_init_scripts.parsed_ego_conf
 # }
 
-output "domain_name" {
-  value = ibm_dns_zone.private_zone.name
-}
+# output "domain_name" {
+#   value = ibm_dns_zone.private_zone.name
+# }
+
 
 output "debug_workspace_output" {
   value = local.output
