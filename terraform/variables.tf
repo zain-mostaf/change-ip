@@ -43,6 +43,10 @@ variable worker_pool_type {
     }
 }
 
+variable "worker_ip_offset" {
+  default = 32
+}
+
 variable worker_pool_prefix {
     default=""
     description="(Optional) Worker pool prefix to be added after cluster prefix (cluster prefix is captured from HPC management workspace). If informed, workers will be named by the following convention: <cluster_prefix>-<worker_prefix>-<counter>. If omitted, worker will follow the same naming convention from HPC management workspace (<cluster_prefix>-<(worker/wk)>-<counter>.)"
