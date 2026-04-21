@@ -22,6 +22,10 @@ variable private_dns_instance_id {
 
 }
 
+variable private_dns_zone_name {
+
+}
+
 variable machine_ip_name_mapping {
     type = map(string)
 }
