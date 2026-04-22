@@ -90,6 +90,7 @@ locals {
     private_dns_zone_id = local.output.private_dns_zone_id
     dns_domain = try(module.dns_records[0].domain_name, "")
     ssh_key_ids = try(jsondecode(local.output.ssh_key_ids), [])
+    cluster_name = "citi-${local.cluster_prefix}"
 
     /*
     *  Output that can be overwritten by this workspace
