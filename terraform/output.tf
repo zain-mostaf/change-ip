@@ -26,3 +26,7 @@ output "debug_workspace_output" {
 output "cluster_prefix" {
   value = local.cluster_prefix
 }
+
+output "cluster_name" {
+  value = local.cluster_name
+}
