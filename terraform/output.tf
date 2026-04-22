@@ -22,3 +22,7 @@ output "dns_domain_debug" {
 output "debug_workspace_output" {
   value = local.output
 }
+
+output "cluster_prefix" {
+  value = local.cluster_prefix
+}
