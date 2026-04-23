@@ -27,6 +27,7 @@ export CLUSTER_CIDR=$4
 
 
 : === STARTING WORKER DEPLO
+cleanup_log_files                   # common-all.sh  ====> done
 update_nm_plugins                   # common-all.sh  ====> done    
 update_nm_controlled                # common-all.sh  ====> done
 update_dnsmasq_config               # common-all.sh  ====> done

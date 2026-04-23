@@ -39,6 +39,32 @@ export IBM_CLOUD_PROVIDER_WORK=work/providers/ibmcloudgen2inst
     : === Leaving load_default_env_data - common-all.sh
 }
 
+function cleanup_log_files {
+    : === Starting cleanup_log_files - common-all.sh
+    local paths=(
+        "/opt/ibm/spectrumcomputing/kernel/log/*"
+        "/opt/ibm/spectrumcomputing/eservice/wsg/log/*"
+        "/opt/ibm/spectrumcomputing/eservice/esc/log/*"
+        "/opt/ibm/spectrumcomputing/eservice/rs/log/*"
+        "/opt/ibm/spectrumcomputing/soam/logs/*"
+        "/opt/ibm/spectrumcomputing/gui/logs/*"
+    )
+
+    echo "Cleaning Spectrum Computing logs..."
+
+    for path in "${paths[@]}"; do
+        if compgen -G "$path" > /dev/null; then
+            echo "Cleaning: $path"
+            rm -f $path
+        else
+            echo "No files found in: $path"
+        fi
+    done
+
+    echo "Log cleanup completed."
+    : === Leaving cleanup_log_files - common-all.sh
+}
+
 function update_nm_plugins {
     : === Starting update_nm_plugins - worker.sh
     local file="/etc/NetworkManager/NetworkManager.conf"
