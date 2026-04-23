@@ -230,13 +230,23 @@ function configure_nm_dns {
     local dns_search_domain="$dns_domain"
     local file="/etc/sysconfig/network-scripts/ifcfg-$iface"
     
+    sleep 20
+
+    if grep -Fxq 'NAME="System eth0"' "$file"; then
+        echo "Renaming NM connection to eth0"
+
+        nmcli con down "System eth0" 2>/dev/null || true
+        nmcli con mod "System eth0" connection.id "eth0" || {
+            echo "Failed to rename connection"
+            return 1
+        }
+        nmcli con up "eth0" 2>/dev/null || true
+    fi
+    nmcli con mod "System eth0" connection.id "eth0"
+    sleep 20
     # Get connection name
     local conn
     conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
-    if [[ "$conn" == "System eth0" ]]; then
-        nmcli con mod "$conn" connection.id "$iface"
-        nmcli con up "$ifaceS"
-    fi
     if [[ -z "$conn" ]]; then
         echo "No active connection found for $iface"
         return 1
@@ -289,13 +299,8 @@ function configure_nm_dns {
 
 function configure_mtu {
     : === Starting configure_mtu - worker.sh
-    local iface="eth0"
-    local desired_mtu="9000"
-
-    # Get active connection name
-    local conn
-    conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
-    nmcli con mod "$conn" 802-3-ethernet.mtu "$desired_mtu"
+    nmcli con mod eth0 802-3-ethernet.mtu 9000
+    nmcli con up eth0 >/dev/null 2>&1
     : === Leaving configure_mtu - worker.sh
 }
 
