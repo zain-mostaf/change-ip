@@ -107,7 +107,7 @@ locals {
     resource_group_id = local.output.resource_group_id
     private_dns_instance_id = local.output.private_dns_instance_id
     private_dns_zone_id = local.output.private_dns_zone_id
-    dns_domain = try(trim(module.dns_records[0].domain_name, "."), "")
+    dns_domain = trim(try(module.dns_records[0].domain_name, ""), ".")
     ssh_key_ids = try(jsondecode(local.output.ssh_key_ids), [])
     cluster_name = "citi-${local.cluster_prefix}"
 
