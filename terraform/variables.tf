@@ -78,5 +78,10 @@ variable security_groups {
     description = "(Optional) List of security group names to be added into this worker. If not informed, the list will be imported from the HPC management offering."
 }
 
-
+variable "idm_password" {
+    default=""
+    description="(Optional) Password for IDM users. If not informed, the value from HPC Management workspace will be used."
+    sensitive = true
+    type = string
+}
 

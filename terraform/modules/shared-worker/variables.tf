@@ -46,9 +46,9 @@ variable ssh_keys {
     type=list(string)
 }
 
-# variable cloud_init_script {
+variable cloud_init_script {
 
-# }
+}
 
 variable vpc_id {
 

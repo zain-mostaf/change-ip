@@ -135,6 +135,7 @@ locals {
 
     // Worker pool type
     worker_pool_type = var.worker_pool_type
+    idm_password = var.idm_password 
 
 }
 
@@ -180,6 +181,14 @@ module shared_workers {
     resource_group_id = local.resource_group_id
     ssh_keys = local.ssh_key_ids
     vpc_id = local.workload_vpc_id
+    cloud_init_script = templatefile("${path.module}/cloud-init/workers.tpl", {
+        base64_zip    = filebase64("${path.module}/cloud-init/deployment-scripts.zip"),
+        cluster_name = local.cluster_name,
+        num_of_management_nodes = local.num_of_management_nodes,
+        dns_domain = local.dns_domain,
+        symphony_subnet_cidr = local.symphony_subnet_cidr,
+        idm_password = var.idm_password
+      })
 }
 
 
@@ -190,5 +199,5 @@ module shared_workers {
 
 # cd /opt/symphony-scripts/nextgen
 # chmod 755 *.sh
-# ./worker.sh "${local.cluster_name}" "${local.num_of_management_nodes}" "${local.dns_domain}" "${local.symphony_subnet_cidr}"
+# ./worker.sh "${local.cluster_name}" "${local.num_of_management_nodes}" "${local.dns_domain}" "${local.symphony_subnet_cidr}" "${local.idm_password}"
 # ./worker.sh "${local.cluster_name}" ${var.management_node_count} "${local.dns_domain}" "${module.gpfs_storage.scale_manager_names[0]}" "${data.ibm_is_subnet.subnet.ipv4_cidr_block}" "${var.ad_dns_ips}" "${var.ad_domain}" "${var.ad_user}" "${var.ad_password}"
