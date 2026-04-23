@@ -82,19 +82,6 @@ locals {
         ""
     )
 
-    # symphony_subnet_id = try(
-    #         try(
-    #         local.output.symphony_subnet_id,
-    #         try(
-    #             [for input in data.ibm_schematics_workspace.schematics_workspace.template_inputs :
-    #             input.value if input.name == "symphony_subnet_id"][0],
-    #             [for input in data.ibm_schematics_workspace.schematics_workspace.template_values_metadata :
-    #             input.default if input.name == "symphony_subnet_id"][0]
-    #         )
-    #         ),
-    #         ""
-    # )
-
     /*
     * Declared input variables in the HPC Managemeny Schematics workspace that can be overwritten by this workspace
     */
@@ -122,7 +109,9 @@ locals {
     /*
     *  Output that can be overwritten by this workspace
     */
+    
     symphony_subnet_id = var.symphony_subnet_id != "" ? var.symphony_subnet_id : local.output.symphony_subnet_id
+    symphony_subnet_cidr = data.ibm_is_subnet.symphony_subnet.ipv4_cidr_block
     symphony_worker_security_group = length(var.security_groups) > 0 ? flatten([for sg_name in var.security_groups : [for sg in module.security_groups.security_groups : sg.id if sg.name == sg_name]]) : try(jsondecode(local.output.symphony_worker_security_group), [])
 
     symphony_instance_profile = var.symphony_instance_profile != "" ? var.symphony_instance_profile : local.symphony_compute_instance_profile
@@ -196,4 +185,5 @@ module shared_workers {
 
 # cd /opt/symphony-scripts/nextgen
 # chmod 755 *.sh
-# ./worker.sh "${local.cluster_name}" "${var.management_node_count}" "${local.dns_domain}" "" "${data.ibm_is_subnet.subnet.ipv4_cidr_block}" "${var.ad_dns_ips}" "${var.ad_domain}" "${var.ad_user}" "${var.ad_password}"
+# ./worker.sh "${local.cluster_name}" "${var.management_node_count}" "${local.dns_domain}" "${local.symphony_subnet_id}"
+# ./worker.sh "${local.cluster_name}" ${var.management_node_count} "${local.dns_domain}" "${module.gpfs_storage.scale_manager_names[0]}" "${data.ibm_is_subnet.subnet.ipv4_cidr_block}" "${var.ad_dns_ips}" "${var.ad_domain}" "${var.ad_user}" "${var.ad_password}"

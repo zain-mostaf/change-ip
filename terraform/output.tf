@@ -42,3 +42,7 @@ output "cluster_prefix" {
 output "cluster_name" {
   value = local.cluster_name
 }
+
+output "symphony_subnet_cidr" {
+  value = local.symphony_subnet_cidr
+}
