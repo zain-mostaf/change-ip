@@ -229,8 +229,10 @@ function configure_nm_dns {
     local dns_options="single-request-reopen,edns0"
     local dns_search_domain="$dns_domain"
     local file="/etc/sysconfig/network-scripts/ifcfg-$iface"
-    if grep -Fxq 'NAME="System eth0"' "$file"; then
-        nmcli connection modify  "System eth0" connection.id eth0
+    if grep -Eq '^NAME="?System eth0"?' "$file"; then
+        echo "Renaming NM connection to eth0"
+        nmcli con mod "System eth0" connection.id "eth0" 2>/dev/null || true
+        nmcli con up "eth0" 2>/dev/null || true
     fi
     # Get connection name
     local conn
@@ -407,48 +409,48 @@ function restart_networking {
     : === Leaving restart_networking - worker.sh
 }
 
-function update_resolv_conf {
-    : === Starting update_resolv_conf - worker.sh
-    local file="/etc/resolv.conf"
-    local search_line="search $domainName"
-    local ns_line="nameserver 127.0.0.1"
+# function update_resolv_conf {
+#     : === Starting update_resolv_conf - worker.sh
+#     local file="/etc/resolv.conf"
+#     local search_line="search $domainName"
+#     local ns_line="nameserver 127.0.0.1"
 
-    if [[ ! -f "$file" ]]; then
-        echo "File not found: $file"
-        return 1
-    fi
+#     if [[ ! -f "$file" ]]; then
+#         echo "File not found: $file"
+#         return 1
+#     fi
 
-    echo "Checking $file"
+#     echo "Checking $file"
 
-    # --- Search domain ---
-    if grep -Fxq "$search_line" "$file"; then
-        echo "Search domain already set. No change."
-    else
-        echo "Updating search domain..."
+#     # --- Search domain ---
+#     if grep -Fxq "$search_line" "$file"; then
+#         echo "Search domain already set. No change."
+#     else
+#         echo "Updating search domain..."
 
-        if grep -q '^search ' "$file"; then
-            sed -i "s/^search .*/$search_line/" "$file"
-        else
-            printf "%s\n" "$search_line" >> "$file"
-        fi
-    fi
+#         if grep -q '^search ' "$file"; then
+#             sed -i "s/^search .*/$search_line/" "$file"
+#         else
+#             printf "%s\n" "$search_line" >> "$file"
+#         fi
+#     fi
 
-    # --- Nameserver ---
-    if grep -Fxq "$ns_line" "$file"; then
-        echo "Nameserver already set. No change."
-    else
-        echo "Updating nameserver..."
+#     # --- Nameserver ---
+#     if grep -Fxq "$ns_line" "$file"; then
+#         echo "Nameserver already set. No change."
+#     else
+#         echo "Updating nameserver..."
 
-        if grep -q '^nameserver ' "$file"; then
-            sed -i "s/^nameserver .*/$ns_line/" "$file"
-        else
-            printf "%s\n" "$ns_line" >> "$file"
-        fi
-    fi
+#         if grep -q '^nameserver ' "$file"; then
+#             sed -i "s/^nameserver .*/$ns_line/" "$file"
+#         else
+#             printf "%s\n" "$ns_line" >> "$file"
+#         fi
+#     fi
 
-    echo "resolv.conf update completed."
-    : === Leaving update_resolv_conf - worker.sh
-}
+#     echo "resolv.conf update completed."
+#     : === Leaving update_resolv_conf - worker.sh
+# }
 
 function reinstall_idm_client {
     : === Starting reinstall_idm_client - worker.sh
