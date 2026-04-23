@@ -492,7 +492,7 @@ function reinstall_idm_client {
         --ntp-server="$ntp_server" \
         --mkhomedir \
         --unattended \
-        --force
+        --force-join
 
     if [[ $? -eq 0 ]]; then
         echo "IdM client installed successfully."
