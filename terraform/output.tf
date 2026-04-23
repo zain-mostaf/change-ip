@@ -14,9 +14,9 @@
 #     value = module.cloud_init_scripts.parsed_ego_conf
 # }
 
-# output "dns_domain_debug" {
-#   value = local.dns_domain
-# }
+output "dns_domain" {
+  value = local.dns_domain
+}
 
 
 # output "debug_workspace_output" {
