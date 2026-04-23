@@ -38,7 +38,6 @@ configure_nm_dns                    # common-all.sh  ====> done
 update_dhclient_conf                # common-all.sh  ====> done
 update_nm_dhcp_client               # common-all.sh  ====> done
 restart_networking                  # common-all.sh  ====> done
-update_resolv_conf                  # common-all.sh  ====> done
 reinstall_idm_client                # common-all.sh  ====> done
 check_data_dir                      # common-all.sh  ====> done
 NFS_Storage_Mounted                 # common-all.sh  ====> done

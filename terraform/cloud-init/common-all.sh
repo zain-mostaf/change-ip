@@ -229,19 +229,13 @@ function configure_nm_dns {
     local dns_options="single-request-reopen,edns0"
     local dns_search_domain="$dns_domain"
     local file="/etc/sysconfig/network-scripts/ifcfg-$iface"
-    if grep -Fxq 'NAME="System eth0"' "$file"; then
-        echo "Renaming NM connection to eth0"
-        nmcli con down "System eth0" 2>/dev/null || true
-        nmcli con mod "System eth0" connection.id "eth0" || {
-            echo "Failed to rename connection"
-            return 1
-        }
-        nmcli con up "eth0" 2>/dev/null || true
-    fi
+    
     # Get connection name
     local conn
     conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
-
+    if [[ "$conn" == "System eth0" ]]; then
+        nmcli con mod $conn connection.id   $iface
+    fi
     if [[ -z "$conn" ]]; then
         echo "No active connection found for $iface"
         return 1
