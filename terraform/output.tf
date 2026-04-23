@@ -27,6 +27,10 @@ output "symphony_cluster_info" {
   value = local.symphony_cluster_info
 }
 
+output "num_of_management_nodes" {
+  value = local.num_of_management_nodes
+}
+
 output "cluster_prefix" {
   value = local.cluster_prefix
 }

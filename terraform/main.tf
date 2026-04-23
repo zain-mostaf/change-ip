@@ -68,6 +68,22 @@ locals {
         ),
     "")
 
+
+    num_of_management_nodes = try(
+        try(
+        local.output.num_of_management_nodes,
+        try(
+            [for input in data.ibm_schematics_workspace.schematics_workspace.template_inputs :
+            input.value if input.name == "num_of_management_nodes"][0],
+            [for input in data.ibm_schematics_workspace.schematics_workspace.template_values_metadata :
+            input.default if input.name == "num_of_management_nodes"][0]
+        )
+        ),
+        ""
+    )
+
+
+
     /*
     * Declared input variables in the HPC Managemeny Schematics workspace that can be overwritten by this workspace
     */
