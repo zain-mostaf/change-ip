@@ -16,29 +16,6 @@ set -x
 #cluster ID should be 39 characters alphanumeric no spaces, supports -_.
 export clusterID=$1
 
-function create_user1 {
-    local username="user1"
-    local password="admin"
-
-    if id "$username" &>/dev/null; then
-        echo "User $username already exists."
-    else
-        echo "Creating user $username..."
-        useradd -m "$username" || return 1
-    fi
-
-    echo "$username:$password" | chpasswd || return 1
-
-    if id -nG "$username" | grep -qw wheel; then
-        echo "Already in sudo group."
-    else
-        usermod -aG wheel "$username"
-    fi
-
-    echo "User $username ready with sudo access."
-}
-
-create_user1
 load_default_env_data #common-all.sh
 
 #common =================
