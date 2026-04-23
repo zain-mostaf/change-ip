@@ -214,7 +214,7 @@ function configure_nm_dns {
     local iface="eth0"
     local dns_servers="161.26.0.7 161.26.0.8"
     local dns_options="single-request-reopen,edns0"
-    local dns_search_domain="$domainName"
+    local dns_search_domain="$dns_domain"
 
     # Get connection name
     local conn
