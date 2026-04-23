@@ -190,5 +190,5 @@ module shared_workers {
 
 # cd /opt/symphony-scripts/nextgen
 # chmod 755 *.sh
-# ./worker.sh "${local.cluster_name}" "${var.management_node_count}" "${local.dns_domain}" "${local.symphony_subnet_id}"
+# ./worker.sh "${local.cluster_name}" "${local.num_of_management_nodes}" "${local.dns_domain}" "${local.symphony_subnet_cidr}"
 # ./worker.sh "${local.cluster_name}" ${var.management_node_count} "${local.dns_domain}" "${module.gpfs_storage.scale_manager_names[0]}" "${data.ibm_is_subnet.subnet.ipv4_cidr_block}" "${var.ad_dns_ips}" "${var.ad_domain}" "${var.ad_user}" "${var.ad_password}"
