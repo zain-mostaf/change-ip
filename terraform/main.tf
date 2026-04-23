@@ -41,6 +41,11 @@ data shell_script validate_pool_cidr_size {
 
 // validation for ad_join_password field against password protection coming from parent workspace
 
+data "ibm_is_subnet" "symphony_subnet" {
+  provider   = ibm.builder   # important in your setup
+  identifier = local.symphony_subnet_id
+}
+
 locals {
 
     // New HPC Management offerings outputs all needed data to be consumed by this worker pool.
