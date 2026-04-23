@@ -234,8 +234,8 @@ function configure_nm_dns {
     local conn
     conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
     if [[ "$conn" == "System eth0" ]]; then
-        nmcli con mod $conn connection.id $iface
-        nmcli con up $ifaceS
+        nmcli con mod "$conn" connection.id "$iface"
+        nmcli con up "$ifaceS"
     fi
     if [[ -z "$conn" ]]; then
         echo "No active connection found for $iface"
