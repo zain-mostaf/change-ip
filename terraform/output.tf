@@ -31,6 +31,10 @@ output "num_of_management_nodes" {
   value = local.num_of_management_nodes
 }
 
+output "symphony_subnet_id" {
+  value = local.symphony_subnet_id
+}
+
 output "cluster_prefix" {
   value = local.cluster_prefix
 }
