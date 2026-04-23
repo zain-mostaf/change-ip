@@ -87,7 +87,10 @@ function update_nm_plugins {
 
 function update_nm_controlled {
     : === Starting update_nm_controlled - worker.sh
+        echo "=== Starting update_nm_controlled - worker.sh"
+
     local dir="/etc/sysconfig/network-scripts"
+
     if [[ ! -d "$dir" ]]; then
         echo "Directory not found: $dir"
         return 1
@@ -96,8 +99,18 @@ function update_nm_controlled {
     for file in "$dir"/ifcfg-*; do
         [[ -f "$file" ]] || continue
 
+        local base
+        base=$(basename "$file")
+
+        # Skip loopback
+        if [[ "$base" == "ifcfg-lo" ]]; then
+            echo "Skipping $file (loopback)"
+            continue
+        fi
+
         echo "Processing $file"
 
+        # --- NM_CONTROLLED logic ---
         if grep -q '^NM_CONTROLLED=yes' "$file"; then
             echo "  Already set to yes. No change."
 
@@ -215,7 +228,10 @@ function configure_nm_dns {
     local dns_servers="161.26.0.7 161.26.0.8"
     local dns_options="single-request-reopen,edns0"
     local dns_search_domain="$dns_domain"
-
+    local file="/etc/sysconfig/network-scripts/ifcfg-$iface"
+    if grep -Fxq 'NAME="System eth0"' "$file"; then
+        nmcli connection modify  "System eth0" connection.id eth0
+    fi
     # Get connection name
     local conn
     conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
@@ -266,8 +282,7 @@ function configure_nm_dns {
         echo "Setting DNS options..."
         nmcli con mod "$conn" ipv4.dns-options "$dns_options"
     fi
-
-    echo "DNS configuration completed."
+    nmcli con up "$conn" >/dev/null 2>&1
     : === Leaving configure_nm_dns - worker.sh
 }
 
@@ -279,27 +294,7 @@ function configure_mtu {
     # Get active connection name
     local conn
     conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: -v dev="$iface" '$2==dev {print $1}')
-
-    if [[ -z "$conn" ]]; then
-        echo "No active connection found for $iface"
-        return 1
-    fi
-
-    echo "Using connection: $conn"
-
-    # Get current MTU
-    local current_mtu
-    current_mtu=$(nmcli -g 802-3-ethernet.mtu con show "$conn")
-
-    # If empty, treat as default (1500 usually)
-    current_mtu=${current_mtu:-1500}
-
-    if [[ "$current_mtu" == "$desired_mtu" ]]; then
-        echo "MTU already set to $desired_mtu. No change."
-    else
-        echo "Updating MTU to $desired_mtu..."
-        nmcli con mod "$conn" 802-3-ethernet.mtu "$desired_mtu"
-    fi
+    nmcli con mod "$conn" 802-3-ethernet.mtu "$desired_mtu"
     : === Leaving configure_mtu - worker.sh
 }
 
@@ -408,6 +403,7 @@ function restart_networking {
     done
 
     echo "Network restart and interface reactivation completed."
+    sleep 20
     : === Leaving restart_networking - worker.sh
 }
 
@@ -451,7 +447,7 @@ function update_resolv_conf {
     fi
 
     echo "resolv.conf update completed."
-    : === Stopping update_resolv_conf - worker.sh
+    : === Leaving update_resolv_conf - worker.sh
 }
 
 function reinstall_idm_client {
@@ -465,7 +461,7 @@ function reinstall_idm_client {
     # --- Step 1: Uninstall (ignore errors if not installed) ---
     echo "Uninstalling existing IdM client (if any)..."
     ipa-client-install --uninstall -U >/dev/null 2>&1 || true
-
+    sleep 20
     # --- Step 2: DNS validation ---
     echo "Validating DNS resolution for IdM servers..."
 
@@ -479,7 +475,7 @@ function reinstall_idm_client {
             return 1
         fi
     done
-
+    sleep 20
     # --- Step 3: Install IdM client ---
     echo "Installing IdM client..."
 
@@ -649,7 +645,8 @@ function NFS_Storage_Unmounted
     : === Starting NFS_Storage_Unmounted common-all.sh
     echo "y" | egosh ego shutdown
     cp -f  /opt/symphony-scripts/data/*   ${EGO_TOP}/kernel/conf/
-    sed -i '/fsf-tor0551a-byok-fz.adn.networklayer.com:\/4ff2e321_f8bf_4531_8a8b_ec2414712ad8/d' /etc/fstab
+    #sed -i '/fsf-tor0551a-byok-fz.adn.networklayer.com:\/4ff2e321_f8bf_4531_8a8b_ec2414712ad8/d' /etc/fstab
+    sed -i '\|^172.200.250.8:/109650d7_f65d_40ff_ac6b_5527596af85e /data nfs4|d' /etc/fstab
     umount /data
     df -h
     sleep 20
