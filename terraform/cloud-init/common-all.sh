@@ -413,49 +413,6 @@ function restart_networking {
     : === Leaving restart_networking - worker.sh
 }
 
-# function update_resolv_conf {
-#     : === Starting update_resolv_conf - worker.sh
-#     local file="/etc/resolv.conf"
-#     local search_line="search $domainName"
-#     local ns_line="nameserver 127.0.0.1"
-
-#     if [[ ! -f "$file" ]]; then
-#         echo "File not found: $file"
-#         return 1
-#     fi
-
-#     echo "Checking $file"
-
-#     # --- Search domain ---
-#     if grep -Fxq "$search_line" "$file"; then
-#         echo "Search domain already set. No change."
-#     else
-#         echo "Updating search domain..."
-
-#         if grep -q '^search ' "$file"; then
-#             sed -i "s/^search .*/$search_line/" "$file"
-#         else
-#             printf "%s\n" "$search_line" >> "$file"
-#         fi
-#     fi
-
-#     # --- Nameserver ---
-#     if grep -Fxq "$ns_line" "$file"; then
-#         echo "Nameserver already set. No change."
-#     else
-#         echo "Updating nameserver..."
-
-#         if grep -q '^nameserver ' "$file"; then
-#             sed -i "s/^nameserver .*/$ns_line/" "$file"
-#         else
-#             printf "%s\n" "$ns_line" >> "$file"
-#         fi
-#     fi
-
-#     echo "resolv.conf update completed."
-#     : === Leaving update_resolv_conf - worker.sh
-# }
-
 function reinstall_idm_client {
     : === Starting reinstall_idm_client - worker.sh
     #local servers=("$server1" "$server2" "$server3")
