@@ -227,7 +227,6 @@ function configure_nm_dns {
     local iface="eth0"
     local dns_servers="161.26.0.7 161.26.0.8"
     local dns_options="single-request-reopen,edns0"
-    local dns_search_domain="$dns_domain"
     local file="/etc/sysconfig/network-scripts/ifcfg-$iface"
     
     sleep 20
@@ -242,7 +241,7 @@ function configure_nm_dns {
         }
         nmcli con up "eth0" 2>/dev/null || true
     fi
-    nmcli con mod "System eth0" connection.id "eth0"
+
     sleep 20
     # Get connection name
     local conn
@@ -264,13 +263,13 @@ function configure_nm_dns {
     fi
 
     # --- DNS search domain ---
-    if [[ -n "$dns_search_domain" ]]; then
+    if [[ -n "$domainName" ]]; then
         current_search=$(nmcli -g ipv4.dns-search con show "$conn")
-        if [[ "$current_search" == "$dns_search_domain" ]]; then
+        if [[ "$current_search" == "$domainName" ]]; then
             echo "DNS search domain already configured. No change."
         else
             echo "Setting DNS search domain..."
-            nmcli con mod "$conn" ipv4.dns-search "$dns_search_domain"
+            nmcli con mod "$conn" ipv4.dns-search "$domainName"
         fi
     else
         echo "domainName variable is empty. Skipping DNS search domain."

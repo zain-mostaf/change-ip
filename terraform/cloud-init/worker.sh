@@ -23,7 +23,7 @@ export enableSSL=N
 
 export numExpectedManagementHosts=$2
 # Option to use Private DNS
-export domainName=".$3"
+export domainName="$3"
 #vpn
 export CLUSTER_CIDR=$4
 
