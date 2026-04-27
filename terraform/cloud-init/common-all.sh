@@ -235,9 +235,9 @@ function configure_nm_dns {
         echo "Renaming NM connection to eth0"
 
         nmcli con down "System eth0" 2>/dev/null || true
-        nmcli con mod "System eth0" connection.id "eth0" || {
-            echo "Failed to rename connection"
-            return 1
+        nmcli con mod "System eth0" connection.id eth0 || {
+         echo "Failed to rename connection"
+          return 1
         }
         nmcli con up "eth0" 2>/dev/null || true
     fi
