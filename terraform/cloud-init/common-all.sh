@@ -231,13 +231,15 @@ function configure_nm_dns {
     
     sleep 20
 
-    if grep -Fxq 'NAME="System eth0"' "$file"; then
+    conn=$(nmcli -t -f NAME,DEVICE con show --active | awk -F: '$2=="eth0" {print $1}')
+
+    if [[ "$conn" == "System eth0" ]]; then
         echo "Renaming NM connection to eth0"
 
-        nmcli con down "System eth0" 2>/dev/null || true
-        nmcli con mod "System eth0" connection.id eth0 || {
-         echo "Failed to rename connection"
-          return 1
+        nmcli con down "$conn" 2>/dev/null || true
+        nmcli con mod "$conn" connection.id eth0 || {
+            echo "Failed to rename connection"
+            return 1
         }
         nmcli con up "eth0" 2>/dev/null || true
     fi
