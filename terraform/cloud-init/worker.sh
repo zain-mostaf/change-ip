@@ -46,7 +46,9 @@ configure_nm_dns                    # common-all.sh  ====> done
 sleep 30
 update_dhclient_conf                # common-all.sh  ====> done
 sleep 30
-update_nm_dhcp_client               # common-all.sh  ====> done
+update_nm_dhcp_client                # common-all.sh  ====> done
+sleep 30              
+configure_mtu                       # common-all.sh  ====> done
 sleep 30
 restart_networking                  # common-all.sh  ====> done
 sleep 30
