@@ -480,7 +480,7 @@ function check_data_dir {
 function NFS_Storage_Mounted {
     : === Starting NFS_Storage_Mounted common-all.sh
 	# Add the NFS mount entry to /etc/fstab
-	echo "172.200.250.8:/109650d7_f65d_40ff_ac6b_5527596af85e /data nfs4 nfsvers=4.1,sec=sys,_netdev 0 0" >> /etc/fstab
+	echo "172.16.134.8:/2002d4a9_2c38_4e0a_a6be_fdcbfd6d8a17 /data nfs4 nfsvers=4.1,sec=sys,_netdev 0 0" >> /etc/fstab
 
 	# Reload the systemd daemon, mount all filesystems, and display disk usage
 	systemctl daemon-reload
