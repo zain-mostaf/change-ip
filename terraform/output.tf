@@ -19,9 +19,9 @@ output "dns_domain" {
 }
 
 
-# output "debug_workspace_output" {
-#   value = local.output
-# }
+ output "debug_workspace_output" {
+   value = local.output
+}
 
 output "symphony_cluster_info" {
   value = local.symphony_cluster_info
